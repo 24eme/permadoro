@@ -30,14 +30,27 @@
     }
     document.getElementById('enableNotifications').addEventListener('click', async function(e) {
       await Notification.requestPermission();
-      new Notification("Pomodoro", {
-        body: 'Les notifications ont été acceptées'
-      });
+      if(Notification.permission === "granted") {
+        document.getElementById('enableNotifications').style.display = 'none';
+      }
     })
+
+    window.addEventListener("hashchange", function(e) {
+      document.location.reload();
+    });
 
     let periods = [];
     const today = new Date();
     let startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+
+    if(window.location.hash.match(/#start/)) {
+      document.location.hash = '#' + Math.round((today.getTime() - startDate.getTime()) / 1000) % 7800;
+    }
+
+    if(window.location.hash.match(/#[0-9]+/)) {
+      startDate = new Date(startDate.getTime() + parseInt(window.location.hash.replace('#', ''))*1000);
+    }
+
     let endDate = startDate;
     for(j=1;j<=24;j++) {
       for(i=1; i<=4; i++) {
@@ -47,7 +60,7 @@
         startDate = endDate
         if(i < 4) {
           endDate = new Date(startDate.getTime() + 5*60000)
-          periods.push({title: 'Pause courte', icon: '☕', start: startDate, end: endDate, durationText: '5 min',  notificationText: "On lève les mains du clavier, c'est l'heure d'une courte pause de 5 minutes !"});
+          periods.push({title: 'Pause courte', icon: '☕', start: startDate, end: endDate, durationText: '5 min',  notificationText: "On lève les mains du clavier, courte pause de 5 minutes !"});
         } else {
           endDate = new Date(startDate.getTime() + 15*60000)
           periods.push({title: 'Pause longue', icon: '🏖️', start: startDate, end: endDate, durationText: '15 min', notificationText: "Loooooonnnngue pause, 15 minutes pour chiler !"});
