@@ -12,17 +12,28 @@
     }
     #container {
       text-align: center;
-      padding-top: 100px;
+      padding-top: 40px;
+    }
+    .switch {
+      border: 1px solid #c8c8c8; font-size: 3.5em; padding: 8px 16px; color: #999C; background: #f2f2f2; text-decoration: none;
+      box-shadow: inset -1px 1px 6px 2px #e8e8e8; color: #999C;
+    }
+    .switch.active {
+      color: #000;
+      background: white;
+      box-shadow: none;
     }
   </style>
 </head>
 <body>
   <div id="container">
-    <div id="timer" style="font-size: 24em;"></div>
+    <a id="switch_mondial" href="" class="switch active" style="border-radius: 16px 0 0 16px;">🌍 Mondial</a><a id="switch_user" href="#start" class="switch" style="border-radius: 0 16px 16px 0; border-left: 0;">👤 Perso #0000</a>
+    <div id="timer" style="font-size: 24em; margin-top: 80px;"></div>
     <div id="title" style="font-size: 8em; margin-top: 30px;"></div>
     <button id="enableNotifications" type="button" style="font-size: 3em; margin-top: 30px; padding: 8px;">Activer les notifications</button>
-    <div style="font-size: 4.5em; margin-top: 100px; opacity: 0.4;">Prochaine période</div>
-    <div id="titleNext" style="font-size: 4.5em; margin-top: 20px; opacity: 0.4;"></div>
+    <div style="font-size: 4.5em; margin-top: 80px; opacity: 0.25;">Prochaine période</div>
+    <div id="titleNext" style="font-size: 4.5em; margin-top: 20px; margin-bottom: 80px; opacity: 0.25;"></div>
+    <button id="btn_share" type="button" style="font-size: 3.5em; background: #fff; border: 0; color: #000; cursor: pointer; padding: 6px 12px; border-radius: 6px;">👥 Partager ce pomodoro <strong>#0000</strong> à plusieurs</button>
   </div>
   <script>
     if(Notification.permission === "granted") {
@@ -34,6 +45,10 @@
         document.getElementById('enableNotifications').style.display = 'none';
       }
     })
+    document.getElementById('btn_share').addEventListener('click', async function(e) {
+      await navigator.clipboard.writeText(document.location);
+      alert("Le lien pour partager ce pomodoro a été copier-coller.\n\nVous pouvez le partager pour faire ce pomodoro à plusieurs en même temps");
+    });
 
     window.addEventListener("hashchange", function(e) {
       document.location.reload();
@@ -46,9 +61,15 @@
     if(window.location.hash.match(/#start/)) {
       document.location.hash = '#' + Math.round((today.getTime() - startDate.getTime()) / 1000) % 7800;
     }
-
+    document.getElementById('switch_user').classList.remove('active')
+    document.getElementById('switch_mondial').classList.add('active')
     if(window.location.hash.match(/#[0-9]+/)) {
       startDate = new Date(startDate.getTime() + parseInt(window.location.hash.replace('#', ''))*1000);
+      document.getElementById('switch_user').classList.add('active')
+      document.getElementById('switch_mondial').classList.remove('active')
+      document.getElementById('switch_user').href = window.location.hash
+      document.getElementById('switch_user').innerText = document.getElementById('switch_user').innerText.replace('#0000', window.location.hash)
+      document.getElementById('btn_share').innerHTML = document.getElementById('btn_share').innerHTML.replace('#0000', window.location.hash)
     }
 
     let endDate = startDate;
@@ -56,7 +77,7 @@
       for(i=1; i<=4; i++) {
         startDate = endDate
         endDate = new Date(startDate.getTime() + 25*60000)
-        periods.push({title: 'Pomodoro', icon: '🍅', start: startDate, end: endDate, durationText: '25 min', notificationText: "On ce concentre sur sa tâche pendant 25 minutes, aucune disctraction !"});
+        periods.push({title: 'Pomodoro', icon: '🍅', start: startDate, end: endDate, durationText: '25 min', notificationText: "On ce concentre sur sa tâche pendant 25 minutes, aucune distraction !"});
         startDate = endDate
         if(i < 4) {
           endDate = new Date(startDate.getTime() + 5*60000)
