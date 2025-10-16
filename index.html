@@ -47,7 +47,7 @@
     })
     document.getElementById('btn_share').addEventListener('click', async function(e) {
       await navigator.clipboard.writeText(document.location);
-      alert("Le lien pour partager ce pomodoro a été copier-coller.\n\nVous pouvez le partager pour faire ce pomodoro à plusieurs en même temps");
+      alert("📋 Le lien pour partager ce pomodoro a été copié.\n\n👥 Il suffit de le partager pour faire ce pomodoro à plusieurs en même temps");
     });
 
     window.addEventListener("hashchange", function(e) {
