@@ -82,7 +82,7 @@
       let period = findCurrentPeriod(now);
       let nextPeriod = findNexPeriod(now);
       let duration = period.end.getTime() - now.getTime();
-      let minuteRest = Math.round(Math.round(duration / 1000) / 60)
+      let minuteRest = Math.floor(Math.round(duration / 1000) / 60)
       let secondRest = Math.round(duration / 1000) % 60
       timer.innerText = minuteRest.toString().padStart(2, "0") + ':' + secondRest.toString().padStart(2, "0")
       title.innerText = period.title
