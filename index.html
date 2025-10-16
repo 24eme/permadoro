@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Permadoro</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <style>
+    body {
+      font-family: monospace;
+    }
+    #container {
+      text-align: center;
+      padding-top: 36vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="timer" style="font-size: 24em;"></div>
+    <div id="title" style="font-size: 12em; margin-top: 100px;"></div>
+    <div id="titleNext" style="font-size: 4.5em; margin-top: 200px; opacity: 0.5;"></div>
+  </div>
+  <script>
+    Notification.requestPermission().then((resultat) => {
+    });
+
+    let periods = [];
+    const today = new Date();
+    let startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+    let endDate = startDate;
+    for(j=1;j<=24;j++) {
+      for(i=1; i<=4; i++) {
+        startDate = endDate
+        endDate = new Date(startDate.getTime() + 25*60000)
+        periods.push({title: 'Pomodoro', start: startDate, end: endDate});
+        startDate = endDate
+        if(i < 4) {
+          endDate = new Date(startDate.getTime() + 5*60000)
+          periods.push({title: 'Pause courte', start: startDate, end: endDate});
+        } else {
+          endDate = new Date(startDate.getTime() + 15*60000)
+          periods.push({title: 'Pause longue', start: startDate, end: endDate});
+        }
+      }
+    }
+
+    function findCurrentPeriod(date) {
+      for(period of periods) {
+
+        if(date.getTime() >= period.start.getTime() && date.getTime() < period.end.getTime()) {
+          return period
+        }
+      }
+
+      return null
+    }
+
+    function findNexPeriod(date) {
+      let finded = false;
+      for(period of periods) {
+        if(finded) {
+          return period;
+        }
+        if(date.getTime() >= period.start.getTime() && date.getTime() < period.end.getTime()) {
+          finded = true;
+        }
+      }
+
+      return null
+    }
+
+    let currentPeriod = findCurrentPeriod(today);
+    let nextPeriod = findNexPeriod(today);
+
+    let timer = document.querySelector("#timer");
+    let title = document.querySelector("#title");
+    let titleNext = document.querySelector("#titleNext");
+    setInterval(function() {
+      let now = new Date()
+      let period = findCurrentPeriod(now);
+      let nextPeriod = findNexPeriod(now);
+      let duration = period.end.getTime() - now.getTime();
+      let minuteRest = Math.round(Math.round(duration / 1000) / 60)
+      let secondRest = Math.round(duration / 1000) % 60
+      timer.innerText = minuteRest.toString().padStart(2, "0") + ':' + secondRest.toString().padStart(2, "0")
+      title.innerText = period.title
+      titleNext.innerText = "Prochaine période : " + nextPeriod.title
+      if(period.startDate != currentPeriod.startDate) {
+        currentPeriod = period
+        const notification = new Notification(currentPeriod.title, {
+          body: currentPeriod.title
+        });
+      }
+    }, 500)
+  </script>
+</body>
+</html>
