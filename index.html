@@ -19,17 +19,14 @@
 <body>
   <div id="container">
     <div id="timer" style="font-size: 24em;"></div>
-    <div id="title" style="font-size: 12em; margin-top: 30px;"></div>
+    <div id="title" style="font-size: 8em; margin-top: 30px;"></div>
     <button id="enableNotifications" type="button" style="font-size: 3em; margin-top: 30px; padding: 8px;">Activer les notifications</button>
-    <div id="notificationsEnabled" style="font-size: 3.5em; margin-top: 30px; padding: 8px; color: #cecece; display: none;">Notifications activées</div>
     <div style="font-size: 4.5em; margin-top: 100px; opacity: 0.4;">Prochaine période</div>
     <div id="titleNext" style="font-size: 4.5em; margin-top: 20px; opacity: 0.4;"></div>
   </div>
   <script>
-
     if(Notification.permission === "granted") {
       document.getElementById('enableNotifications').style.display = 'none';
-      document.getElementById('notificationsEnabled').style.display = 'block';
     }
     document.getElementById('enableNotifications').addEventListener('click', async function(e) {
       await Notification.requestPermission();
@@ -46,14 +43,14 @@
       for(i=1; i<=4; i++) {
         startDate = endDate
         endDate = new Date(startDate.getTime() + 25*60000)
-        periods.push({title: 'Pomodoro', icon: '🍅', start: startDate, end: endDate, durationText: '25 min'});
+        periods.push({title: 'Pomodoro', icon: '🍅', start: startDate, end: endDate, durationText: '25 min', notificationText: "On ce concentre sur sa tâche pendant 25 minutes, aucune disctraction !"});
         startDate = endDate
         if(i < 4) {
           endDate = new Date(startDate.getTime() + 5*60000)
-          periods.push({title: 'Pause courte', icon: '☕', start: startDate, end: endDate, durationText: '5 min'});
+          periods.push({title: 'Pause courte', icon: '☕', start: startDate, end: endDate, durationText: '5 min',  notificationText: "On lève les mains du clavier, c'est l'heure d'une courte pause de 5 minutes !"});
         } else {
           endDate = new Date(startDate.getTime() + 15*60000)
-          periods.push({title: 'Pause longue', icon: '🏖️', start: startDate, end: endDate, durationText: '15 min'});
+          periods.push({title: 'Pause longue', icon: '🏖️', start: startDate, end: endDate, durationText: '15 min', notificationText: "Loooooonnnngue pause, 15 minutes pour chiler !"});
         }
       }
     }
@@ -84,7 +81,6 @@
     }
 
     let currentPeriod = findCurrentPeriod(today);
-    let nextPeriod = findNexPeriod(today);
 
     let timer = document.querySelector("#timer");
     let title = document.querySelector("#title");
@@ -103,7 +99,7 @@
       if(period.start != currentPeriod.start) {
         currentPeriod = period
         new Notification(period.title, {
-          body: "Un période de Pomodoro commence, focus sur une tâche !"
+          body: period.icon + ' ' + period.notificationText
         });
       }
     }, 500)
