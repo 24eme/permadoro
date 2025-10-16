@@ -86,6 +86,7 @@
       let secondRest = Math.round(duration / 1000) % 60
       timer.innerText = minuteRest.toString().padStart(2, "0") + ':' + secondRest.toString().padStart(2, "0")
       title.innerText = period.title
+      document.title = timer.innerText + ' - ' + title.innerText
       titleNext.innerText = "Prochaine période : " + nextPeriod.title
       if(period.startDate != currentPeriod.startDate) {
         currentPeriod = period
