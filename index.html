@@ -2,9 +2,9 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title></title>
+  <title>Permadoro - Pomodoro collectif</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="" />
+  <meta name="description" content="Une application libre de pomodoro collectif pour faire des sessions de pomodoro à plusieurs" />
   <style>
     body {
       font-family: monospace;
@@ -71,6 +71,8 @@
       document.getElementById('switch_user').href = window.location.hash
       document.getElementById('switch_user').innerText = document.getElementById('switch_user').innerText.replace('#0000', window.location.hash)
       document.getElementById('btn_share').innerHTML = document.getElementById('btn_share').innerHTML.replace('#0000', window.location.hash)
+    } else {
+      document.getElementById('btn_share').innerHTML = document.getElementById('btn_share').innerHTML.replace('#0000', 'Universel')
     }
 
     let endDate = startDate;
