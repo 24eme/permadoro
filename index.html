@@ -24,6 +24,7 @@
       box-shadow: none;
     }
   </style>
+  <script src="faviconx-min.js"></script>
 </head>
 <body>
   <div id="container">
@@ -55,6 +56,17 @@
       document.location.reload();
     });
 
+    FavIconX.config({
+      borderColor: '#000',
+      fillColor: '#000',
+      borderWidth: 2,
+      shadowColor: '#fff',
+      shape: 'circle',
+      updateTitle: false
+    });
+
+    document.title = 'Permadoro - Pomodoro collectif';
+
     let periods = [];
     const today = new Date();
     let startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
@@ -80,14 +92,14 @@
       for(i=1; i<=4; i++) {
         startDate = endDate
         endDate = new Date(startDate.getTime() + 25*60000)
-        periods.push({title: 'Pomodoro', icon: '🍅', start: startDate, end: endDate, durationText: '25 min', notificationText: "On ce concentre sur sa tâche pendant 25 minutes, aucune distraction !"});
+        periods.push({title: 'Pomodoro', icon: '🍅', start: startDate, end: endDate, durationText: '25 min', notificationText: "On ce concentre sur sa tâche pendant 25 minutes, aucune distraction !", color: "", color: "#dd2e44", duration: 25*60000});
         startDate = endDate
         if(i < 4) {
           endDate = new Date(startDate.getTime() + 5*60000)
-          periods.push({title: 'Pause courte', icon: '☕', start: startDate, end: endDate, durationText: '5 min',  notificationText: "On lève les mains du clavier, courte pause de 5 minutes !"});
+          periods.push({title: 'Pause courte', icon: '☕', start: startDate, end: endDate, durationText: '5 min',  notificationText: "On lève les mains du clavier, courte pause de 5 minutes !", color: "#8a4b38", duration: 5*60000});
         } else {
           endDate = new Date(startDate.getTime() + 15*60000)
-          periods.push({title: 'Pause longue', icon: '🏖️', start: startDate, end: endDate, durationText: '15 min', notificationText: "Loooooonnnngue pause, 15 minutes pour chiler !"});
+          periods.push({title: 'Pause longue', icon: '🏖️', start: startDate, end: endDate, durationText: '15 min', notificationText: "Loooooonnnngue pause, 15 minutes pour chiler !", color: "#f4900c", duration: 15*60000});
         }
       }
     }
@@ -129,6 +141,11 @@
       let duration = period.end.getTime() - now.getTime();
       let minuteRest = Math.floor(Math.round(duration / 1000) / 60)
       let secondRest = Math.round(duration / 1000) % 60
+      FavIconX.config({
+        borderColor: period.color,
+        fillColor: period.color,
+      })
+      FavIconX.setValue(parseInt(100 - duration*100/period.duration));
       timer.innerText = minuteRest.toString().padStart(2, "0") + ':' + secondRest.toString().padStart(2, "0")
       title.innerText = period.icon + ' ' + period.title
       document.title = period.icon + ' ' + timer.innerText
