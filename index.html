@@ -10,12 +10,15 @@
       font-family: monospace;
       font-size: 4.5px;
     }
+    a {
+      text-decoration: none;
+    }
     #container {
       text-align: center;
       padding-top: 40px;
     }
     .switch {
-      border: 1px solid #c8c8c8; font-size: 3.5em; padding: 8px 16px; color: #999C; background: #f2f2f2; text-decoration: none;
+      border: 1px solid #c8c8c8; font-size: 3.5em; padding: 8px 16px; color: #999C; background: #f2f2f2;
       box-shadow: inset -1px 1px 6px 2px #e8e8e8; color: #999C;
     }
     .switch.active {
@@ -38,25 +41,47 @@
     #title {
       font-size: 8em; margin-top: 30px;
     }
-    #btn_share {
-      font-size: 3.5em; background: #fff; border: 0; color: #000; cursor: pointer; padding: 6px 12px; border-radius: 6px;
+    #container_next_period {
+      margin-top: 50px;
     }
-    #footer {
-      position: fixed; bottom: 10px; font-size: 5em; color: #999; width: 100%; text-align: center;
+    #table_next_period {
+      font-size: 4.5em;
+      display: inline-block;
+      opacity: 0.25;
+    }
+    #table_next_period td:nth-child(1) {
+      padding-top: 15px;
+    }
+    #table_next_period td:nth-child(2) {
+      text-align: left; padding-left: 10px; padding-right: 20px; padding-top: 15px;
+    }
+    #table_next_period td:nth-child(3) {
+      text-align: right; font-size: 0.75em; padding-top: 15px;
+    }
+    #btn_share {
+      font-size: 3.75em; background: #fff; border: 0; color: #000; cursor: pointer; padding: 6px 12px; border-radius: 6px; margin-top: 70px;
+    }
+    #help {
+      position: absolute; top: 10px; right: 10px; font-size: 3.5em; color: #999; text-align: center; opacity: 0.75;
     }
   </style>
   <script src="faviconx-min.js"></script>
 </head>
 <body>
   <div id="container">
-    <a id="switch_mondial" href="" class="switch active">🌍 Universel</a><a id="switch_user" href="#start" class="switch">👤 Perso #0000</a>
-    <div id="timer" style=""></div>
-    <div id="title"></div>
+    <a id="switch_mondial" href="" class="switch active" title="Suivre le pomodoro permanent identique pour tout le monde">🌍 Universel</a><a id="switch_user" href="#start" class="switch" title="Démarrer un pomodoro à partir de maintenant">👤 Perso #0000</a>
+    <div id="timer">00:00</div>
+    <div id="title">🍅 Pomodoro</div>
     <button id="enable_notifications" type="button">Activer les notifications</button>
-    <div style="font-size: 4.5em; margin-top: 80px; opacity: 0.25;">Prochaine période</div>
-    <div id="titleNext" style="font-size: 4.5em; margin-top: 20px; margin-bottom: 80px; opacity: 0.25;"></div>
-    <button id="btn_share" type="button">👥 Partager ce pomodoro <strong>#0000</strong> à plusieurs</button>
-    <div id="footer"><a style="text-decoration: none;" href="https://github.com/24eme/permadoro">🍝</a></div>
+    <div id="container_next_period">
+    <table id="table_next_period">
+      <tr><td>🍅</td><td>Pomodoro</td><td>25 min</td></tr>
+      <tr><td>☕</td><td>Pause courte</td><td>5 min</td></tr>
+      <tr><td>🍅</td><td>Pomodoro</td><td>25 min</td></tr>
+    </table>
+    </div>
+    <button id="btn_share" title="Partage un lien pour faire le même pomodoro à plusieurs personnes" type="button">👥 Partager à plusieurs ce pomodoro <strong>#0000</strong></button>
+    <div id="help"><a title="Voir le code source" href="https://github.com/24eme/permadoro">ℹ️</a></div>
   </div>
   <script>
     if(Notification.permission === "granted") {
@@ -106,6 +131,7 @@
       document.getElementById('btn_share').innerHTML = document.getElementById('btn_share').innerHTML.replace('#0000', window.location.hash)
     } else {
       document.getElementById('btn_share').innerHTML = document.getElementById('btn_share').innerHTML.replace('#0000', 'Universel')
+      document.getElementById('btn_share').style.visibility = 'hidden'
     }
 
     let endDate = startDate;
@@ -125,11 +151,17 @@
       }
     }
 
-    function findCurrentPeriod(date) {
+    function findPeriod(date, nbAfter = 0) {
+      let founded = false;
       for(period of periods) {
-
-        if(date.getTime() >= period.start.getTime() && date.getTime() < period.end.getTime()) {
+        if(!founded && date.getTime() >= period.start.getTime() && date.getTime() < period.end.getTime()) {
+          founded = true;
+        }
+        if(founded && !nbAfter) {
           return period
+        }
+        if(founded) {
+          nbAfter = nbAfter - 1;
         }
       }
 
@@ -150,15 +182,14 @@
       return null
     }
 
-    let currentPeriod = findCurrentPeriod(today);
+    let currentPeriod = findPeriod(today);
 
     let timer = document.querySelector("#timer");
     let title = document.querySelector("#title");
     let titleNext = document.querySelector("#titleNext");
     setInterval(function() {
       let now = new Date()
-      let period = findCurrentPeriod(now);
-      let nextPeriod = findNexPeriod(now);
+      let period = findPeriod(now);
       let duration = period.end.getTime() - now.getTime();
       let minuteRest = Math.floor(Math.round(duration / 1000) / 60)
       let secondRest = Math.round(duration / 1000) % 60
@@ -170,7 +201,17 @@
       timer.innerText = minuteRest.toString().padStart(2, "0") + ':' + secondRest.toString().padStart(2, "0")
       title.innerText = period.icon + ' ' + period.title
       document.title = period.icon + ' ' + timer.innerText
-      titleNext.innerHTML = nextPeriod.icon + ' ' + nextPeriod.title + ' de ' +  nextPeriod.durationText
+
+      for(i=1; i<=3; i++) {
+        let nextPeriod = findPeriod(now, i);
+        let tdIcon = document.querySelector('#table_next_period tr:nth-child(' + i + ') td:nth-child(1)')
+        let tdLabel = document.querySelector('#table_next_period tr:nth-child(' + i + ') td:nth-child(2)')
+        let tdDuration = document.querySelector('#table_next_period tr:nth-child(' + i + ') td:nth-child(3)')
+        tdIcon.innerText = nextPeriod.icon
+        tdLabel.innerText = nextPeriod.title
+        tdDuration.innerText = nextPeriod.durationText
+      }
+
       if(period.start != currentPeriod.start) {
         currentPeriod = period
         new Notification(period.title, {
