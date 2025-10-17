@@ -1,3 +1,3 @@
-# Permardoro
+# 🍝 Permardoro
 
-Une application libre de pomodoro collective qui permet de faire des pomodoro à plusieurs.
+Une application libre de pomodoro collectif pour faire des sessions de pomodoro à plusieurs.
