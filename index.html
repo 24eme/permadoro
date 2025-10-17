@@ -23,28 +23,49 @@
       background: white;
       box-shadow: none;
     }
+    #switch_mondial {
+      border-radius: 16px 0 0 16px;
+    }
+    #switch_user {
+      border-radius: 0 16px 16px 0; border-left: 0;
+    }
+    #enable_notifications {
+      font-size: 3em; margin-top: 30px; padding: 8px;
+    }
+    #timer {
+      font-size: 24em; margin-top: 80px;
+    }
+    #title {
+      font-size: 8em; margin-top: 30px;
+    }
+    #btn_share {
+      font-size: 3.5em; background: #fff; border: 0; color: #000; cursor: pointer; padding: 6px 12px; border-radius: 6px;
+    }
+    #footer {
+      position: fixed; bottom: 10px; font-size: 5em; color: #999; width: 100%; text-align: center;
+    }
   </style>
   <script src="faviconx-min.js"></script>
 </head>
 <body>
   <div id="container">
-    <a id="switch_mondial" href="" class="switch active" style="border-radius: 16px 0 0 16px;">🌍 Universel</a><a id="switch_user" href="#start" class="switch" style="border-radius: 0 16px 16px 0; border-left: 0;">👤 Perso #0000</a>
-    <div id="timer" style="font-size: 24em; margin-top: 80px;"></div>
-    <div id="title" style="font-size: 8em; margin-top: 30px;"></div>
-    <button id="enableNotifications" type="button" style="font-size: 3em; margin-top: 30px; padding: 8px;">Activer les notifications</button>
+    <a id="switch_mondial" href="" class="switch active">🌍 Universel</a><a id="switch_user" href="#start" class="switch">👤 Perso #0000</a>
+    <div id="timer" style=""></div>
+    <div id="title"></div>
+    <button id="enable_notifications" type="button">Activer les notifications</button>
     <div style="font-size: 4.5em; margin-top: 80px; opacity: 0.25;">Prochaine période</div>
     <div id="titleNext" style="font-size: 4.5em; margin-top: 20px; margin-bottom: 80px; opacity: 0.25;"></div>
-    <button id="btn_share" type="button" style="font-size: 3.5em; background: #fff; border: 0; color: #000; cursor: pointer; padding: 6px 12px; border-radius: 6px;">👥 Partager ce pomodoro <strong>#0000</strong> à plusieurs</button>
-    <div style="position: fixed; bottom: 10px; font-size: 5em; color: #999; width: 100%; text-align: center;"><a style="text-decoration: none;" href="https://github.com/24eme/permadoro">🍝</a></div>
+    <button id="btn_share" type="button">👥 Partager ce pomodoro <strong>#0000</strong> à plusieurs</button>
+    <div id="footer"><a style="text-decoration: none;" href="https://github.com/24eme/permadoro">🍝</a></div>
   </div>
   <script>
     if(Notification.permission === "granted") {
-      document.getElementById('enableNotifications').style.display = 'none';
+      document.getElementById('enable_notifications').style.display = 'none';
     }
-    document.getElementById('enableNotifications').addEventListener('click', async function(e) {
+    document.getElementById('enable_notifications').addEventListener('click', async function(e) {
       await Notification.requestPermission();
       if(Notification.permission === "granted") {
-        document.getElementById('enableNotifications').style.display = 'none';
+        document.getElementById('enable_notifications').style.display = 'none';
       }
     })
     document.getElementById('btn_share').addEventListener('click', async function(e) {
@@ -99,7 +120,7 @@
           periods.push({title: 'Pause courte', icon: '☕', start: startDate, end: endDate, durationText: '5 min',  notificationText: "On lève les mains du clavier, courte pause de 5 minutes !", color: "#8a4b38", duration: 5*60000});
         } else {
           endDate = new Date(startDate.getTime() + 15*60000)
-          periods.push({title: 'Pause longue', icon: '🏖️', start: startDate, end: endDate, durationText: '15 min', notificationText: "Loooooonnnngue pause, 15 minutes pour chiler !", color: "#f4900c", duration: 15*60000});
+          periods.push({title: 'Pause longue', icon: '🏖️', start: startDate, end: endDate, durationText: '15 min', notificationText: "Loooooonnnngue pause, 15 minutes pour chiller !", color: "#f4900c", duration: 15*60000});
         }
       }
     }
