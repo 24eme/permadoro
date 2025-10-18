@@ -70,14 +70,14 @@
 <body>
   <div id="container">
     <a id="switch_mondial" href="" class="switch active" title="Suivre le pomodoro permanent identique pour tout le monde">🌍 Universel</a><a id="switch_user" href="#start" class="switch" title="Démarrer un pomodoro à partir de maintenant">👤 Perso #0000</a>
-    <div id="timer">00:00</div>
-    <div id="title">🍅 Pomodoro</div>
+    <div id="timer">&nbsp;</div>
+    <div id="title">&nbsp;</div>
     <button id="enable_notifications" type="button">Activer les notifications</button>
     <div id="container_next_period">
     <table id="table_next_period">
-      <tr><td>🍅</td><td>Pomodoro</td><td>25 min</td></tr>
-      <tr><td>☕</td><td>Pause courte</td><td>5 min</td></tr>
-      <tr><td>🍅</td><td>Pomodoro</td><td>25 min</td></tr>
+      <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
     </table>
     </div>
     <button id="btn_share" title="Partage un lien pour faire le même pomodoro à plusieurs personnes" type="button">👥 Partager à plusieurs ce pomodoro <strong>#0000</strong></button>
@@ -95,7 +95,7 @@
     })
     document.getElementById('btn_share').addEventListener('click', async function(e) {
       await navigator.clipboard.writeText(document.location);
-      alert("📋 Le lien pour partager ce pomodoro a été copié.\n\n👥 Il suffit de le partager pour faire ce pomodoro à plusieurs en même temps");
+      alert("📋 Le lien pour partager ce pomodoro a été copié.\n\nℹ️ Il suffit de le partager pour faire ce pomodoro à plusieurs en même temps.");
     });
 
     window.addEventListener("hashchange", function(e) {
@@ -187,7 +187,8 @@
     let timer = document.querySelector("#timer");
     let title = document.querySelector("#title");
     let titleNext = document.querySelector("#titleNext");
-    setInterval(function() {
+
+    function updateTimer() {
       let now = new Date()
       let period = findPeriod(now);
       let duration = period.end.getTime() - now.getTime();
@@ -218,7 +219,9 @@
           body: period.icon + ' ' + period.notificationText
         });
       }
-    }, 500)
+    }
+    updateTimer();
+    setInterval(function() {updateTimer()}, 1000)
   </script>
 </body>
 </html>
