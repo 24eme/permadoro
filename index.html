@@ -81,7 +81,10 @@
     </table>
     </div>
     <button id="btn_share" title="Partage un lien pour faire le même pomodoro à plusieurs personnes" type="button">👥 Partager à plusieurs ce pomodoro <strong>#0000</strong></button>
-    <div id="help"><a title="Voir le code source" href="https://github.com/24eme/permadoro">ℹ️</a></div>
+    <div id="help">
+      <a title="Voir le code source" href="https://github.com/24eme/permadoro">ℹ️</a>
+      <a href="" id="btn_join" title="Rejoindre un pomodoro existant à partir d'un numéro" type="button">🔢</a>
+    </div>
   </div>
   <script>
     if(Notification.permission === "granted") {
@@ -96,6 +99,17 @@
     document.getElementById('btn_share').addEventListener('click', async function(e) {
       await navigator.clipboard.writeText(document.location);
       alert("📋 Le lien pour partager ce pomodoro a été copié.\n\nℹ️ Il suffit de le partager pour faire ce pomodoro à plusieurs en même temps.");
+    });
+    document.getElementById('btn_join').addEventListener('click', async function(e) {
+      e.preventDefault();
+      let numero = prompt("Saisissez le numéro du pomodoro");
+      if(!numero) {
+        return false;
+      }
+      numero = numero.replace(/[^0-9]*/g, '')
+      if(numero) {
+        document.location.hash = '#' + numero;
+      }
     });
 
     window.addEventListener("hashchange", function(e) {
@@ -131,7 +145,7 @@
       document.getElementById('btn_share').innerHTML = document.getElementById('btn_share').innerHTML.replace('#0000', window.location.hash)
     } else {
       document.getElementById('btn_share').innerHTML = document.getElementById('btn_share').innerHTML.replace('#0000', 'Universel')
-      document.getElementById('btn_share').style.visibility = 'hidden'
+      document.getElementById('btn_share').style.display = 'none'
     }
 
     let endDate = startDate;
