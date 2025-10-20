@@ -87,7 +87,11 @@
     </div>
   </div>
   <script>
-    if(Notification.permission === "granted") {
+    try {
+      if(Notification.permission === "granted") {
+        document.getElementById('enable_notifications').style.display = 'none';
+      }
+    }catch (error) {
       document.getElementById('enable_notifications').style.display = 'none';
     }
     document.getElementById('enable_notifications').addEventListener('click', async function(e) {
