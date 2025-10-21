@@ -133,7 +133,8 @@
 
     let periods = [];
     const today = new Date();
-    let startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+    let startDateHistoric = new Date(1980, 10, 24, 0, 0, 0);
+    let startDate = new Date(startDateHistoric.getTime() + (Math.floor((today.getTime() - startDateHistoric.getTime()) / (7800 * 1000)) * 7800 * 1000))
 
     if(window.location.hash.match(/#start/)) {
       document.location.hash = '#' + Math.round((today.getTime() - startDate.getTime()) / 1000) % 7800;
