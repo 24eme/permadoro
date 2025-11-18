@@ -1,6 +1,7 @@
 import PomodoroCard from "./components/PomodoroCard.js";
 
-const pomodoroCount = 6;
+const pomodoroCount = 9;
+const icons = ["🐻","🐝", "🦊","🐧","🐨","🦄","🐱","🐢","🐼"];
 
 const app = Vue.createApp({
   components: { PomodoroCard },
@@ -10,21 +11,19 @@ const app = Vue.createApp({
     };
   },
   created() {
-    let activeIndex = 1;
+    let activeIndex = 0;
     if(document.location.hash) {
       activeIndex = parseInt(document.location.hash.replace('#', ''))
     }
-    for (let i = 1; i <= pomodoroCount; i++) {
+    for (let i = 0; i < pomodoroCount; i++) {
       this.pomodoros.push({
         index: i,
+        icon: icons[i],
         isactive: i == activeIndex
       });
     }
   },
   computed: {
-    getSortedPomodoros() {
-      return this.pomodoros.sort(function(a, b) { return a.startDate.getTime() > b.startDate.getTime() });
-    }
   }
 });
 

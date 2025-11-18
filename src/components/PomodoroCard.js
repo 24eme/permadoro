@@ -1,7 +1,7 @@
 const dateHistoric = new Date(1980, 10, 24, 0, 0, 0);
 export default {
   name: "PomodoroCard",
-  props: ["index", "isactive"],
+  props: ["index", "icon", "isactive"],
   data() {
     return {
         title: "🍅 Pomodoro",
@@ -21,12 +21,12 @@ export default {
         ],
     }
   },
-  setup(index, isactive) {
+  setup(index, icon, isactive) {
   },
   created() {
     const today = new Date();
     const component = this;
-    const startDateHistoric = new Date(dateHistoric.getTime() - ((this.index - 1) * (Math.floor(130/6) * 1000 * 60)));
+    const startDateHistoric = new Date(dateHistoric.getTime() - (this.index  * (Math.floor(130/9) * 1000 * 60)));
     this.startDate = new Date(startDateHistoric.getTime() + (Math.floor((today.getTime() - startDateHistoric.getTime()) / (7800 * 1000)) * 7800 * 1000))
     this.updateTimer()
     setInterval(function() {
