@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Permadoro - Pomodoro collectif</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Une application libre de pomodoro collectif pour faire des sessions de pomodoro à plusieurs" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script type="module" src="./src/app.js"></script>
+  </head>
+
+  <body>
+    <div id="app" class="container mt-3">
+      <div class="row">
+        <div v-for="(p, i) in pomodoros" class="col-md-12 col-lg-6 mt-4">
+            <pomodoro-card
+            :index="p.index"
+            :isactive="p.isactive"
+            />
+        </div>
+      </div>
+    </div>
+    <template id="pomodoro-template">
+        <div style="cursor: pointer;" class="card" :class="{'shadow': isactive, 'opacity-25': !isactive, 'shadow-sm': !isactive, 'border-0': isactive, 'border-start': isactive, 'border-5': isactive }" :style="{ 'border-color': isactive ? color + ' !important' : '' }">
+            <div class="card-body">
+                <i class="bi position-absolute top-0 start-0 fs-3 ms-2 mt-1" :class="['bi-' + index + '-circle']"></i>
+                <i v-if="isactive" class="bi bi-bell fs-5 position-absolute top-0 end-0 me-2 mt-1"></i>
+                <div class="display-1 text-center mt-4 font-monospace" :class="{  }">{{ minuteRest }}:{{ secondRest }}</div>
+                <div class="fs-4 text-center mt-2 pb-3">{{ title }}</div>
+                <div class="d-flex mt-4">
+                    <div v-for="period in periods" class="progress me-1" role="progressbar" aria-label="" :aria-valuenow="period.progress" aria-valuemin="0" aria-valuemax="100" style="height: 12px;" :style="{ 'width': period.width }"><div class="progress-bar" :style="{'width': period.progress + '%', 'background': period.color }"></div></div>
+                </div>
+            </div>
+        </div>
+    </template>
+  </body>
+</html>
