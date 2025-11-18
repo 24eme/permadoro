@@ -1,24 +1,34 @@
 const dateHistoric = new Date(1980, 10, 24, 0, 0, 0);
+const pomodoroMinutes = 25;
+const shortbreakMinutes = 5;
+const longbreakMinutes = 15;
+const totalMinutes = 130;
+const pomodoroPeriods = {
+  pomodoro: { title: "🍅 Pomodoro", duration: pomodoroMinutes * 1000 * 60, color: '#dc3545'},
+  shortbreak: { title: "☕ Pause Courte", duration: shortbreakMinutes * 1000 * 60, color: '#ffc107'},
+  longbreak: { title: "🏖️ Pause longue", duration: longbreakMinutes * 1000 * 60, color: '#ffc107'}
+}
+
 export default {
   name: "PomodoroCard",
   props: ["index", "icon", "isactive"],
   data() {
     return {
-        title: "🍅 Pomodoro",
+        title: pomodoroPeriods.pomodoro.title,
         active: false,
         minuteRest: null,
         secondRest: null,
         startDate: new Date(),
-        color: '#dc3545',
+        color: pomodoroPeriods.pomodoro.color,
         periods: [
-          { startTime: 0, duration: 25 * 1000 * 60, title: "🍅 Pomodoro", color: '#dc3545', width: Math.round(25 / 130 * 100) + '%' },
-          { startTime: 25 * 1000 * 60, duration: 5 * 1000 * 60, title: "☕ Pause Courte", color: '#ffc107', width: Math.round(5 / 130 * 100) + '%' },
-          { startTime: 30 * 1000 * 60, duration: 25 * 1000 * 60, title: "🍅 Pomodoro", color: '#dc3545', width: Math.round(25 / 130 * 100) + '%' },
-          { startTime: 55 * 1000 * 60, duration: 5 * 1000 * 60, title: "☕ Pause Courte", color: '#ffc107', width: Math.round(5 / 130 * 100) + '%' },
-          { startTime: 60 * 1000 * 60, duration: 25 * 1000 * 60, title: "🍅 Pomodoro", color: '#dc3545', width: Math.round(25 / 130 * 100) + '%' },
-          { startTime: 85 * 1000 * 60, duration: 5 * 1000 * 60, title: "☕ Pause Courte", color: '#ffc107', width: Math.round(5 / 130 * 100) + '%' },
-          { startTime: 90 * 1000 * 60, duration: 25 * 1000 * 60, title: "🍅 Pomodoro", color: '#dc3545', width: Math.round(25 / 130 * 100) + '%' },
-          { startTime: 115 * 1000 * 60, duration: 15 * 1000 * 60, title: "🏖️ Pause longue", color: '#ffc107', width: Math.round(15 / 130 * 100) + '%' }
+          { startTime: 0, duration: pomodoroPeriods.pomodoro.duration, title: pomodoroPeriods.pomodoro.title, color: pomodoroPeriods.pomodoro.color, width: Math.round(pomodoroMinutes / totalMinutes * 100) + '%' },
+          { startTime: 25 * 1000 * 60, duration: pomodoroPeriods.shortbreak.duration, title: pomodoroPeriods.shortbreak.title, color: pomodoroPeriods.shortbreak.color, width: Math.round(shortbreakMinutes / totalMinutes * 100) + '%' },
+          { startTime: 30 * 1000 * 60, duration: pomodoroPeriods.pomodoro.duration, title: pomodoroPeriods.pomodoro.title, color: pomodoroPeriods.pomodoro.color, width: Math.round(pomodoroMinutes / totalMinutes * 100) + '%' },
+          { startTime: 55 * 1000 * 60, duration: pomodoroPeriods.shortbreak.duration, title: pomodoroPeriods.shortbreak.title, color: pomodoroPeriods.shortbreak.color, width: Math.round(shortbreakMinutes / totalMinutes * 100) + '%' },
+          { startTime: 60 * 1000 * 60, duration: pomodoroPeriods.pomodoro.duration, title: pomodoroPeriods.pomodoro.title, color: pomodoroPeriods.pomodoro.color, width: Math.round(pomodoroMinutes / totalMinutes * 100) + '%' },
+          { startTime: 85 * 1000 * 60, duration: pomodoroPeriods.shortbreak.duration, title: pomodoroPeriods.shortbreak.title, color: pomodoroPeriods.shortbreak.color, width: Math.round(shortbreakMinutes / totalMinutes * 100) + '%' },
+          { startTime: 90 * 1000 * 60, duration: pomodoroPeriods.pomodoro.duration, title: pomodoroPeriods.pomodoro.title, color: pomodoroPeriods.pomodoro.color, width: Math.round(pomodoroMinutes / totalMinutes * 100) + '%' },
+          { startTime: 115 * 1000 * 60, duration: pomodoroPeriods.longbreak.duration, title: pomodoroPeriods.longbreak.title, color: pomodoroPeriods.longbreak.color, width: Math.round(longbreakMinutes / totalMinutes * 100) + '%' }
         ],
     }
   },
@@ -54,9 +64,13 @@ export default {
         this.color = this.period.color
       }
     },
-    setActive(active) {
-      document.location.hash = '#'+this.index+this.icon
+    setActive() {
       this.active = true
+      this.$emit('changeActive', this);
+    }
+  },
+  watch: {
+    'active': function() {
     }
   },
   template: '#pomodoro-template'

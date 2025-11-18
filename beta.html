@@ -18,15 +18,17 @@
       <div class="row">
         <div v-for="p in pomodoros" class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mt-4">
             <pomodoro-card
+            :ref="p.ref"
             :index="p.index"
             :icon="p.icon"
             :isactive="p.index == activeIndex"
+            @change-active="changePomodoroActive"
             />
         </div>
       </div>
     </div>
     <template id="pomodoro-template">
-        <div style="cursor: pointer;" class="card" :class="{'shadow': active, 'opacity-25': !active, 'shadow-sm': !active, 'border-0': active, 'border-start': active, 'border-5': active }" :style="{ 'border-color': active ? color + ' !important' : '', 'border-width': active ? '12px !important' : '' }" @click="setActive(true)">
+        <div style="cursor: pointer;" class="card" :class="{'shadow': active, 'opacity-25': !active, 'shadow-sm': !active, 'border-0': active, 'border-start': active, 'border-5': active }" :style="{ 'border-color': active ? color + ' !important' : '', 'border-width': active ? '12px !important' : '' }" @click="setActive()">
             <div class="card-body">
                 <span class="bi position-absolute top-0 start-0 fs-2 ms-2 mt-1">{{ icon }}</span>
                 <i v-if="active" class="bi bi-bell fs-5 position-absolute top-0 end-0 me-2 mt-1"></i>
