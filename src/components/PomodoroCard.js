@@ -5,6 +5,7 @@ export default {
   data() {
     return {
         title: "🍅 Pomodoro",
+        active: false,
         minuteRest: null,
         secondRest: null,
         startDate: new Date(),
@@ -24,9 +25,10 @@ export default {
   setup(index, icon, isactive) {
   },
   created() {
+    this.active = this.isactive
     const today = new Date();
     const component = this;
-    const startDateHistoric = new Date(dateHistoric.getTime() - (this.index  * (Math.floor(130/9) * 1000 * 60)));
+    const startDateHistoric = new Date(dateHistoric.getTime() - (this.index  * (Math.floor(130/6) * 1000 * 60)));
     this.startDate = new Date(startDateHistoric.getTime() + (Math.floor((today.getTime() - startDateHistoric.getTime()) / (7800 * 1000)) * 7800 * 1000))
     this.updateTimer()
     setInterval(function() {
@@ -52,6 +54,10 @@ export default {
         this.color = this.period.color
       }
     },
+    setActive(active) {
+      document.location.hash = '#'+this.index+this.icon
+      this.active = true
+    }
   },
   template: '#pomodoro-template'
 }

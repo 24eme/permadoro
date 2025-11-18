@@ -1,27 +1,37 @@
 import PomodoroCard from "./components/PomodoroCard.js";
 
-const pomodoroCount = 9;
-const icons = ["🐻","🐝", "🦊","🐧","🐨","🦄","🐱","🐢","🐼"];
+const pomodoroCount = 6;
+const icons = ["🐻","🐝", "🦊","🐢","🐨","🦦"];
+// const icons = ["🐻","🐝", "🦊","🐧","🐨","🦦","🦝","🐢","🐼"];
 
 const app = Vue.createApp({
   components: { PomodoroCard },
   data() {
     return {
-      pomodoros: []
+      pomodoros: [],
+      activeIndex: 0
     };
   },
+  setup() {
+    const component = this;
+    window.addEventListener('hashchange', function(e) {
+      if(document.location.hash) {
+        this.activeIndex = parseInt(document.location.hash.replace('#', ''))
+      }
+    })
+  },
   created() {
-    let activeIndex = 0;
     if(document.location.hash) {
-      activeIndex = parseInt(document.location.hash.replace('#', ''))
+      this.activeIndex = parseInt(document.location.hash.replace('#', ''))
     }
     for (let i = 0; i < pomodoroCount; i++) {
       this.pomodoros.push({
         index: i,
-        icon: icons[i],
-        isactive: i == activeIndex
+        icon: icons[i]
       });
     }
+  },
+  methods: {
   },
   computed: {
   }
