@@ -10,10 +10,14 @@ const app = Vue.createApp({
     };
   },
   created() {
+    let activeIndex = 1;
+    if(document.location.hash) {
+      activeIndex = parseInt(document.location.hash.replace('#', ''))
+    }
     for (let i = 1; i <= pomodoroCount; i++) {
       this.pomodoros.push({
         index: i,
-        isactive: i == 1
+        isactive: i == activeIndex
       });
     }
   },

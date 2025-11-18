@@ -16,7 +16,7 @@
   <body>
     <div id="app" class="container mt-3">
       <div class="row">
-        <div v-for="(p, i) in pomodoros" class="col-md-12 col-lg-6 mt-4">
+        <div v-for="(p, i) in pomodoros" class="col-sm-12 col-md-6 col-lg-4 mt-4">
             <pomodoro-card
             :index="p.index"
             :isactive="p.isactive"
@@ -25,7 +25,7 @@
       </div>
     </div>
     <template id="pomodoro-template">
-        <div style="cursor: pointer;" class="card" :class="{'shadow': isactive, 'opacity-25': !isactive, 'shadow-sm': !isactive, 'border-0': isactive, 'border-start': isactive, 'border-5': isactive }" :style="{ 'border-color': isactive ? color + ' !important' : '' }">
+        <div style="cursor: pointer;" class="card" :class="{'shadow': isactive, 'opacity-25': !isactive, 'shadow-sm': !isactive, 'border-0': isactive, 'border-start': isactive, 'border-5': isactive }" :style="{ 'border-color': isactive ? color + ' !important' : '', 'border-width': isactive ? '12px !important' : '' }">
             <div class="card-body">
                 <i class="bi position-absolute top-0 start-0 fs-3 ms-2 mt-1" :class="['bi-' + index + '-circle']"></i>
                 <i v-if="isactive" class="bi bi-bell fs-5 position-absolute top-0 end-0 me-2 mt-1"></i>
