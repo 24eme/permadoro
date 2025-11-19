@@ -1,18 +1,19 @@
 import PomodoroCard from "./components/PomodoroCard.js";
 
 const pomodoroCount = 6;
-const icons = ["🐻","🐝", "🦊","🐢","🐨","🦦"];
-// const icons = ["🐻","🐝", "🦊","🐧","🐨","🦦","🦝","🐢","🐼"];
+const icons = ["🐻","🐝", "🦊","🐢","🐨","🦦","🐧","🐯","🐳","🐗","🐼","🦔","🦝","🐶"];
 
 const app = Vue.createApp({
   components: { PomodoroCard },
   data() {
     return {
       pomodoros: [],
-      activeIndex: 0
+      activeIndex: null
     };
   },
   mounted() {
+    this.sortPomodoros();
+    this.pomodoros[0].refObject[0].setActive()
   },
   created() {
     if(document.location.hash) {
@@ -23,30 +24,59 @@ const app = Vue.createApp({
         ref: 'pomodoro_' + i,
         index: i,
         icon: icons[i],
+        partof: pomodoroCount,
         refObject: Vue.useTemplateRef('pomodoro_' + i)
       });
     }
-    document.location.hash = '#'+this.pomodoros[this.activeIndex].index+this.pomodoros[this.activeIndex].icon
+    this.updateHash();
     window.addEventListener('hashchange', this.changeHash);
   },
   methods: {
+    sortPomodoros() {
+       this.pomodoros.sort(function(a, b) {
+        if(!a.refObject) {
+          return a.index <= b.index;
+        }
+        return a.refObject[0].duration > b.refObject[0].duration
+      });
+    },
+    getPomodoro(index) {
+      for(let p of this.pomodoros) {
+        if(p.index == index) {
+          return p;
+        }
+      }
+
+      return null;
+    },
     changeHash() {
-      this.activeIndex = parseInt(document.location.hash.replace('#', ''))
-      if(!document.location.hash || !this.pomodoros[this.activeIndex]) {
+      const activeIndex = parseInt(document.location.hash.replace('#', ''))
+      const p = this.getPomodoro(activeIndex);
+      if(!document.location.hash || !p || !p.refObject) {
           return;
       }
-      this.pomodoros[this.activeIndex].refObject[0].setActive()
+      this.activeIndex = activeIndex
+      p.refObject[0].setActive();
+    },
+    updateHash() {
+      const p = this.getPomodoro(this.activeIndex);
+      if(!p) {
+        return;
+      }
+      document.location.hash = '#'+p.index+p.icon;
     },
     changePomodoroActive(pActive) {
-      document.location.hash = '#'+pActive.index+pActive.icon
+      this.activeIndex = pActive.index;
+      this.updateHash();
       for(let p of this.pomodoros) {
         if(pActive.index != p.index) {
           p.refObject[0].active = false
         }
       }
+    },
+    endPomodoro(p) {
+      this.sortPomodoros();
     }
-  },
-  computed: {
   }
 });
 

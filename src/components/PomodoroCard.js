@@ -11,14 +11,16 @@ const pomodoroPeriods = {
 
 export default {
   name: "PomodoroCard",
-  props: ["index", "icon", "isactive"],
+  props: ["index", "icon", "isactive", "partof"],
   data() {
     return {
         title: pomodoroPeriods.pomodoro.title,
         active: false,
         minuteRest: null,
         secondRest: null,
+        startDateHistoric: null,
         startDate: new Date(),
+        duration: 0,
         color: pomodoroPeriods.pomodoro.color,
         periods: [
           { startTime: 0, duration: pomodoroPeriods.pomodoro.duration, title: pomodoroPeriods.pomodoro.title, color: pomodoroPeriods.pomodoro.color, width: Math.round(pomodoroMinutes / totalMinutes * 100) + '%' },
@@ -32,20 +34,20 @@ export default {
         ],
     }
   },
-  setup(index, icon, isactive) {
+  setup(index, icon, isactive, partof) {
   },
   created() {
     this.active = this.isactive
-    const today = new Date();
-    const component = this;
-    const startDateHistoric = new Date(dateHistoric.getTime() - (this.index  * (Math.floor(130/6) * 1000 * 60)));
-    this.startDate = new Date(startDateHistoric.getTime() + (Math.floor((today.getTime() - startDateHistoric.getTime()) / (7800 * 1000)) * 7800 * 1000))
+    this.startDateHistoric = new Date(dateHistoric.getTime() - (this.index * (Math.floor(totalMinutes/this.partof) * 1000 * 60)));
+    this.updateStartDate()
     this.updateTimer()
-    setInterval(function() {
-        component.updateTimer()
-    }, 1000)
+    setInterval(this.updateTimer, 1000)
   },
   methods: {
+    updateStartDate() {
+      const today = new Date();
+      this.startDate = new Date(this.startDateHistoric.getTime() + (Math.floor((today.getTime() - this.startDateHistoric.getTime()) / (7800 * 1000)) * 7800 * 1000))
+    },
     updateTimer() {
       let now = new Date();
       let duration = now.getTime() - this.startDate.getTime();
@@ -55,6 +57,7 @@ export default {
           this.period = period
         }
       }
+      this.duration = duration;
       if(this.period) {
         let periodeEnd = new Date(this.startDate.getTime() + this.period.startTime + this.period.duration)
         let periodeDuration = periodeEnd.getTime() - now.getTime();
@@ -62,6 +65,11 @@ export default {
         this.secondRest = (Math.round(periodeDuration / 1000) % 60).toString().padStart(2, "0")
         this.title = this.period.title
         this.color = this.period.color
+      }
+      if(this.duration >= totalMinutes * 1000 * 60) {
+        this.updateStartDate();
+        this.updateTimer()
+        this.$emit('end', this);
       }
     },
     setActive() {

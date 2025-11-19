@@ -16,13 +16,16 @@
   <body>
     <div id="app" class="container mt-3">
       <div class="row">
-        <div v-for="p in pomodoros" class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mt-4">
+        <div v-for="p of pomodoros" class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mt-4">
             <pomodoro-card
+            :key="p.index"
             :ref="p.ref"
             :index="p.index"
             :icon="p.icon"
-            :isactive="p.index == activeIndex"
+            :isactive="p.index === activeIndex"
+            :partof="p.partof"
             @change-active="changePomodoroActive"
+            @end="endPomodoro"
             />
         </div>
       </div>
