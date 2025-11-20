@@ -19,6 +19,7 @@ export default {
         minuteRest: null,
         secondRest: null,
         startDateHistoric: null,
+        timer: null,
         startDate: new Date(),
         hasNotification: Notification.permission === "granted",
         duration: 0,
@@ -42,7 +43,7 @@ export default {
     this.startDateHistoric = new Date(dateHistoric.getTime() - (this.index * (Math.floor(totalMinutes/this.partof) * 1000 * 60)));
     this.updateStartDate()
     this.updateTimer()
-    setInterval(this.updateTimer, 1000)
+    this.timer = setInterval(this.updateTimer, 1000)
   },
   methods: {
     updateStartDate() {
@@ -56,21 +57,23 @@ export default {
       }
       let now = new Date();
       let duration = now.getTime() - this.startDate.getTime();
+
       if(this.duration >= totalMinutes * 1000 * 60) {
-        this.updateStartDate();
-        this.updateTimer()
-        this.$emit('end', this);
+        this.resetCycle();
         return;
       }
+
       for(let period of this.periods) {
         period.progress = Math.round((duration - period.startTime) / period.duration * 100)
         if(duration >= period.startTime && duration < period.startTime + period.duration) {
           this.period = period
         }
       }
+
       if(!this.period) {
         return;
       }
+
       this.duration = duration;
       let periodeEnd = new Date(this.startDate.getTime() + this.period.startTime + this.period.duration)
       let periodeDuration = periodeEnd.getTime() - now.getTime();
@@ -78,6 +81,15 @@ export default {
       this.secondRest = (Math.round(periodeDuration / 1000) % 60).toString().padStart(2, "0")
       this.title = this.period.title
       this.color = this.period.color
+
+      if(this.active) {
+        FavIconX.config({
+          borderColor: this.period.color,
+          fillColor: this.period.color,
+        })
+        FavIconX.setValue(parseInt(this.period.progress));
+        document.title = this.period.title.substr(0, 2) + ' ' + this.minuteRest + ':' + this.secondRest + ' - ' + this.icon;
+      }
 
       if(lastStartTimePeriod && lastStartTimePeriod != this.period.startTime) {
         this.changePeriod(this.period)
@@ -90,6 +102,14 @@ export default {
       new Notification(this.icon + ' ' + newPeriod.title, {
         body: newPeriod.notification
       });
+    },
+    resetCycle() {
+      this.updateStartDate();
+      this.updateTimer()
+      this.$emit('end', this);
+    },
+    deactivate() {
+      this.active = false;
     },
     setActive() {
       if(this.active) {
@@ -107,6 +127,9 @@ export default {
     }
   },
   watch: {
+  },
+  beforeUnmount() {
+    clearInterval(this.timer)
   },
   template: '#pomodoro-template'
 }

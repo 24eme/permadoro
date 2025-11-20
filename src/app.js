@@ -12,6 +12,18 @@ const app = Vue.createApp({
       viewAll: false,
     };
   },
+  setup() {
+    FavIconX.config({
+      borderColor: '#000',
+      fillColor: '#000',
+      borderWidth: 2,
+      shadowColor: '#fff',
+      shape: 'circle',
+      updateTitle: false
+    });
+
+    document.title = 'Permadoro - Pomodoro collectif';
+  },
   mounted() {
     this.sortPomodoros();
     if(!this.activeIndex) {
@@ -37,7 +49,7 @@ const app = Vue.createApp({
   },
   methods: {
     sortPomodoros() {
-       this.pomodoros.sort(function(a, b) {
+      this.pomodoros.sort(function(a, b) {
         if(!a.refObject) {
           return a.index <= b.index;
         }
@@ -73,8 +85,8 @@ const app = Vue.createApp({
       this.activeIndex = pActive.index;
       this.updateHash();
       for(let p of this.pomodoros) {
-        if(pActive.index != p.index) {
-          p.refObject[0].active = false
+        if(this.activeIndex != p.index) {
+          p.refObject[0].deactivate()
         }
       }
       this.viewAll = false
