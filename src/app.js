@@ -10,6 +10,7 @@ const app = Vue.createApp({
       pomodoros: [],
       activeIndex: null,
       viewAll: false,
+      hasSound: false
     };
   },
   setup() {
@@ -97,6 +98,9 @@ const app = Vue.createApp({
     },
     toggleViewAll() {
       this.viewAll = !this.viewAll;
+    },
+    toggleSound() {
+      this.hasSound = !this.hasSound
     }
   }
 });

@@ -11,7 +11,7 @@ const pomodoroPeriods = {
 
 export default {
   name: "PomodoroCard",
-  props: ["index", "icon", "isactive", "partof"],
+  props: ["index", "icon", "isactive", "partof", "hasSound"],
   data() {
     return {
         title: pomodoroPeriods.pomodoro.title, notification: pomodoroPeriods.pomodoro.notification,
@@ -36,7 +36,7 @@ export default {
         ],
     }
   },
-  setup(index, icon, isactive, partof) {
+  setup(index, icon, isactive, partof, hasSound) {
   },
   created() {
     this.active = this.isactive
@@ -120,6 +120,9 @@ export default {
     },
     toggleViewAll() {
       this.$emit('toggleViewAll');
+    },
+    toggleSound() {
+      this.$emit('toggleSound');
     },
     async activeNotifications() {
       await Notification.requestPermission();
