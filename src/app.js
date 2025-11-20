@@ -8,7 +8,8 @@ const app = Vue.createApp({
   data() {
     return {
       pomodoros: [],
-      activeIndex: null
+      activeIndex: null,
+      viewAll: false,
     };
   },
   mounted() {
@@ -73,9 +74,14 @@ const app = Vue.createApp({
           p.refObject[0].active = false
         }
       }
+      this.viewAll = false
     },
     endPomodoro(p) {
       this.sortPomodoros();
+    },
+    toggleViewAll() {
+      console.log('test 2')
+      this.viewAll = !this.viewAll;
     }
   }
 });

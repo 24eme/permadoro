@@ -92,6 +92,9 @@ export default {
       this.active = true
       this.$emit('changeActive', this);
     },
+    toggleViewAll() {
+      this.$emit('toggleViewAll');
+    },
     async activeNotifications() {
       await Notification.requestPermission();
       this.hasNotification = Notification.permission === "granted"

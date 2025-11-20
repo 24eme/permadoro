@@ -13,10 +13,7 @@
     <script type="module" src="./src/app.js"></script>
     <style>
         .card.inactive {
-            opacity: 0.15;
-        }
-        #pomodoros:hover .card.inactive {
-            opacity: 0.4;
+            opacity: 0.5;
         }
     </style>
   </head>
@@ -24,7 +21,7 @@
   <body>
     <div id="app" class="container mt-3">
       <div id="pomodoros" class="row">
-        <div v-for="p of pomodoros" class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mt-4">
+        <div v-for="p of pomodoros" class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mt-4 mx-auto" :hidden="!viewAll && p.index != activeIndex" :class="{'col-xxl-5': !viewAll}">
             <pomodoro-card
             :key="p.index"
             :ref="p.ref"
@@ -34,16 +31,21 @@
             :partof="p.partof"
             @change-active="changePomodoroActive"
             @end="endPomodoro"
+            @toggle-view-all="toggleViewAll"
             />
         </div>
+      </div>
+      <div class="text-center mt-5">
+      <button class="btn btn-light" @click="toggleViewAll" :hidden="viewAll"><i class="bi bi-arrow-left-right"></i> Changer de pomodoro</button>
+      <button class="btn btn-light" @click="toggleViewAll" :hidden="!viewAll"><i class="bi bi-eye-slash"></i> Cacher la mosaïque</button>
       </div>
     </div>
     <template id="pomodoro-template">
         <div style="cursor: pointer;" class="card" :class="{'shadow': active, 'inactive': !active, 'shadow-sm': !active, 'border-0': active, 'border-start': active, 'border-5': active }" :style="{ 'border-color': active ? color + ' !important' : '', 'border-width': active ? '12px !important' : '', 'cursor': !active ? 'pointer' : 'inherit' }" @click="setActive()">
             <div class="card-body">
-                <span class="bi position-absolute top-0 start-0 fs-2 ms-2 mt-1">{{ icon }}</span>
+                <span class="bi position-absolute top-0 start-0 fs-2 ms-2 mt-1" @click="toggleViewAll" style="cursor: pointer;">{{ icon }}</span>
                 <button v-if="active" class="position-absolute top-0 end-0 btn bt" @click="activeNotifications()"><i class="bi fs-5" :class="{ 'bi-bell': hasNotification, 'bi-bell-slash': !hasNotification }"></i></button>
-                <div class="display-1 text-center mt-4 font-monospace" :class="{  }">{{ minuteRest }}:{{ secondRest }}</div>
+                <div class="display-1 text-center mt-4 font-monospace">{{ minuteRest }}:{{ secondRest }}</div>
                 <div class="fs-4 text-center mt-2 pb-3">{{ title }}</div>
                 <div class="d-flex mt-4">
                     <div v-for="period in periods" class="progress me-1" role="progressbar" aria-label="" :aria-valuenow="period.progress" aria-valuemin="0" aria-valuemax="100" style="height: 12px;" :style="{ 'width': period.width }"><div class="progress-bar" :style="{'width': period.progress + '%', 'background': period.color }"></div></div>
