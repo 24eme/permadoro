@@ -57,20 +57,21 @@ export default {
       }
       let now = new Date();
       let duration = now.getTime() - this.startDate.getTime();
-
-      if(this.duration >= totalMinutes * 1000 * 60) {
+      if(duration > (totalMinutes * 1000 * 60)) {
         this.resetCycle();
         return;
       }
 
+      let found = false;
       for(let period of this.periods) {
         period.progress = Math.round((duration - period.startTime) / period.duration * 100)
         if(duration >= period.startTime && duration < period.startTime + period.duration) {
           this.period = period
+          found = true;
         }
       }
 
-      if(!this.period) {
+      if(!found) {
         return;
       }
 
