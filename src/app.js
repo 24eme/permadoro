@@ -30,6 +30,7 @@ const app = Vue.createApp({
       this.activeIndex = this.pomodoros[0].index;
     }
     this.getPomodoro(this.activeIndex).refObject[0].setActive()
+    this.updateHash();
   },
   created() {
     if(document.location.hash) {
