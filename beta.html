@@ -21,7 +21,7 @@
   <body>
     <div id="app" class="container mt-3">
       <div id="pomodoros" class="row">
-        <div v-for="p of pomodoros" class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mt-4 mx-auto" :hidden="!viewAll && p.index != activeIndex" :class="{'col-xxl-5': !viewAll}">
+        <div v-for="p of pomodoros" class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mt-4 mx-auto" :hidden="!viewAll && p.index != activeIndex" :class="{'col-xxl-5': !viewAll, 'col-lg-7': !viewAll, 'col-md-9': !viewAll}">
             <pomodoro-card
             :key="p.index"
             :ref="p.ref"

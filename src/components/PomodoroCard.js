@@ -89,6 +89,9 @@ export default {
       });
     },
     setActive() {
+      if(this.active) {
+        return;
+      }
       this.active = true
       this.$emit('changeActive', this);
     },

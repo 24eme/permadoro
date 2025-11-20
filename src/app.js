@@ -14,7 +14,10 @@ const app = Vue.createApp({
   },
   mounted() {
     this.sortPomodoros();
-    this.pomodoros[0].refObject[0].setActive()
+    if(!this.activeIndex) {
+      this.activeIndex = this.pomodoros[0].index;
+    }
+    this.getPomodoro(this.activeIndex).refObject[0].setActive()
   },
   created() {
     if(document.location.hash) {
