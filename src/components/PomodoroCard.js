@@ -56,28 +56,31 @@ export default {
       }
       let now = new Date();
       let duration = now.getTime() - this.startDate.getTime();
-      for(let period of this.periods) {
-        period.progress = Math.round((duration - period.startTime) / period.duration * 100)
-        if(duration > period.startTime && duration <=period.startTime + period.duration) {
-          this.period = period
-        }
-      }
-      this.duration = duration;
-      if(this.period) {
-        let periodeEnd = new Date(this.startDate.getTime() + this.period.startTime + this.period.duration)
-        let periodeDuration = periodeEnd.getTime() - now.getTime();
-        this.minuteRest = Math.floor(Math.round(periodeDuration / 1000) / 60).toString().padStart(2, "0")
-        this.secondRest = (Math.round(periodeDuration / 1000) % 60).toString().padStart(2, "0")
-        this.title = this.period.title
-        this.color = this.period.color
-      }
-      if(lastStartTimePeriod && lastStartTimePeriod != this.period.startTime) {
-        this.changePeriod(this.period)
-      }
       if(this.duration >= totalMinutes * 1000 * 60) {
         this.updateStartDate();
         this.updateTimer()
         this.$emit('end', this);
+        return;
+      }
+      for(let period of this.periods) {
+        period.progress = Math.round((duration - period.startTime) / period.duration * 100)
+        if(duration >= period.startTime && duration < period.startTime + period.duration) {
+          this.period = period
+        }
+      }
+      if(!this.period) {
+        return;
+      }
+      this.duration = duration;
+      let periodeEnd = new Date(this.startDate.getTime() + this.period.startTime + this.period.duration)
+      let periodeDuration = periodeEnd.getTime() - now.getTime();
+      this.minuteRest = Math.floor(Math.round(periodeDuration / 1000) / 60).toString().padStart(2, "0")
+      this.secondRest = (Math.round(periodeDuration / 1000) % 60).toString().padStart(2, "0")
+      this.title = this.period.title
+      this.color = this.period.color
+
+      if(lastStartTimePeriod && lastStartTimePeriod != this.period.startTime) {
+        this.changePeriod(this.period)
       }
     },
     changePeriod(newPeriod) {
