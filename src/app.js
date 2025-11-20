@@ -95,7 +95,6 @@ const app = Vue.createApp({
       this.sortPomodoros();
     },
     toggleViewAll() {
-      console.log('test 2')
       this.viewAll = !this.viewAll;
     }
   }
