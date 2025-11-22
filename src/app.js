@@ -10,7 +10,7 @@ const app = Vue.createApp({
       pomodoros: [],
       activeIndex: null,
       viewAll: false,
-      hasSound: false
+      hasSound: parseInt(localStorage.getItem("sound"))
     };
   },
   setup() {
@@ -93,6 +93,16 @@ const app = Vue.createApp({
       }
       this.viewAll = false
     },
+    changePomodoroPeriod(p, newPeriod) {
+      if(this.hasSound) {
+        document.getElementById("audio_bell").play();
+      }
+      if(p.activeNotifications) {
+        new Notification(p.icon + ' ' + p.period.title, {
+          body: newPeriod.notification
+        });
+      }
+    },
     endPomodoro(p) {
       this.sortPomodoros();
     },
@@ -100,7 +110,8 @@ const app = Vue.createApp({
       this.viewAll = !this.viewAll;
     },
     toggleSound() {
-      this.hasSound = !this.hasSound
+      this.hasSound = !this.hasSound;
+      localStorage.setItem("sound", this.hasSound*1);
     }
   }
 });

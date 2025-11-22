@@ -21,7 +21,7 @@ export default {
         startDateHistoric: null,
         timer: null,
         startDate: new Date(),
-        hasNotification: Notification.permission === "granted",
+        hasNotification: Notification.permission === "granted" && parseInt(localStorage.getItem('notification')),
         duration: 0,
         color: pomodoroPeriods.pomodoro.color,
         periods: [
@@ -97,12 +97,10 @@ export default {
       }
     },
     changePeriod(newPeriod) {
-      if(!this.active || !this.activeNotifications) {
+      if(!this.active) {
         return;
       }
-      new Notification(this.icon + ' ' + newPeriod.title, {
-        body: newPeriod.notification
-      });
+      this.$emit('changePeriod', this, newPeriod);
     },
     resetCycle() {
       this.updateStartDate();
@@ -125,9 +123,14 @@ export default {
     toggleSound() {
       this.$emit('toggleSound');
     },
-    async activeNotifications() {
-      await Notification.requestPermission();
-      this.hasNotification = Notification.permission === "granted"
+    async toggleNotifications() {
+      if(!this.hasNotification) {
+        await Notification.requestPermission();
+        this.hasNotification = Notification.permission === "granted"
+      } else {
+        this.hasNotification = false
+      }
+      localStorage.setItem('notification', this.hasNotification*1)
     }
   },
   watch: {
