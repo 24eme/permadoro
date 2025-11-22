@@ -123,6 +123,9 @@ export default {
     toggleSound() {
       this.$emit('toggleSound');
     },
+    copyLink() {
+      navigator.clipboard.writeText(document.location.href);
+    },
     async toggleNotifications() {
       if(!this.hasNotification) {
         await Notification.requestPermission();
