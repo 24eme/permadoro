@@ -131,8 +131,7 @@ export default {
     copyLink(element) {
       navigator.clipboard.writeText(document.location.href);
       const btn = element.closest('button');
-      const oldTitle = btn.title;
-      const tooltip = bootstrap.Tooltip.getInstance(btn)
+      const tooltip = bootstrap.Tooltip.getOrCreateInstance(btn)
 
       setTimeout(function() { tooltip.show(); }, 200)
       setTimeout(function() { tooltip.hide(); }, 2000)
