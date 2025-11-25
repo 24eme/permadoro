@@ -4,16 +4,18 @@ const shortbreakMinutes = 5;
 const longbreakMinutes = 15;
 const totalMinutes = 130;
 const pomodoroPeriods = {
-  pomodoro: { title: "🍅 Pomodoro", notification: "On ce concentre sur sa tâche pendant 25 minutes, aucune distraction !", duration: pomodoroMinutes * 1000 * 60, color: '#dc3545'},
-  shortbreak: { title: "☕ Pause Courte", notification: "On lève les mains du clavier, courte pause de 5 minutes !", duration: shortbreakMinutes * 1000 * 60, color: '#ffc107'},
-  longbreak: { title: "🏖️ Pause longue", notification: "Loooooonnnngue pause, 15 minutes pour chiller !", duration: longbreakMinutes * 1000 * 60, color: '#ffc107'}
+  pomodoro: { title: "Pomodoro", icon: "🍅", notification: "On ce concentre sur sa tâche pendant 25 minutes, aucune distraction !", duration: pomodoroMinutes * 1000 * 60, color: '#dc3545'},
+  shortbreak: { title: "Pause Courte", icon: "☕", notification: "On lève les mains du clavier, courte pause de 5 minutes !", duration: shortbreakMinutes * 1000 * 60, color: '#ffc107'},
+  longbreak: { title: "Pause longue", icon: "🏖️", notification: "Loooooonnnngue pause, 15 minutes pour chiller !", duration: longbreakMinutes * 1000 * 60, color: '#ffc107'}
 }
+const chronologie = ['pomodoro', 'shortbreak', 'pomodoro', 'shortbreak', 'pomodoro', 'shortbreak', 'pomodoro', 'longbreak'];
 
 export default {
   name: "PomodoroCard",
   props: ["index", "icon", "isactive", "partof", "hasSound"],
   data() {
-    return {
+
+    const data = {
         title: pomodoroPeriods.pomodoro.title, notification: pomodoroPeriods.pomodoro.notification,
         active: false,
         minuteRest: null,
@@ -25,16 +27,19 @@ export default {
         duration: 0,
         color: pomodoroPeriods.pomodoro.color,
         periods: [
-          { startTime: 0, duration: pomodoroPeriods.pomodoro.duration, title: pomodoroPeriods.pomodoro.title, notification: pomodoroPeriods.pomodoro.notification, color: pomodoroPeriods.pomodoro.color, width: Math.round(pomodoroMinutes / totalMinutes * 100) + '%' },
-          { startTime: 25 * 1000 * 60, duration: pomodoroPeriods.shortbreak.duration, title: pomodoroPeriods.shortbreak.title, notification: pomodoroPeriods.shortbreak.notification, color: pomodoroPeriods.shortbreak.color, width: Math.round(shortbreakMinutes / totalMinutes * 100) + '%' },
-          { startTime: 30 * 1000 * 60, duration: pomodoroPeriods.pomodoro.duration, title: pomodoroPeriods.pomodoro.title, notification: pomodoroPeriods.pomodoro.notification, color: pomodoroPeriods.pomodoro.color, width: Math.round(pomodoroMinutes / totalMinutes * 100) + '%' },
-          { startTime: 55 * 1000 * 60, duration: pomodoroPeriods.shortbreak.duration, title: pomodoroPeriods.shortbreak.title, notification: pomodoroPeriods.shortbreak.notification, color: pomodoroPeriods.shortbreak.color, width: Math.round(shortbreakMinutes / totalMinutes * 100) + '%' },
-          { startTime: 60 * 1000 * 60, duration: pomodoroPeriods.pomodoro.duration, title: pomodoroPeriods.pomodoro.title, notification: pomodoroPeriods.pomodoro.notification, color: pomodoroPeriods.pomodoro.color, width: Math.round(pomodoroMinutes / totalMinutes * 100) + '%' },
-          { startTime: 85 * 1000 * 60, duration: pomodoroPeriods.shortbreak.duration, title: pomodoroPeriods.shortbreak.title, notification: pomodoroPeriods.shortbreak.notification, color: pomodoroPeriods.shortbreak.color, width: Math.round(shortbreakMinutes / totalMinutes * 100) + '%' },
-          { startTime: 90 * 1000 * 60, duration: pomodoroPeriods.pomodoro.duration, title: pomodoroPeriods.pomodoro.title, notification: pomodoroPeriods.pomodoro.notification, color: pomodoroPeriods.pomodoro.color, width: Math.round(pomodoroMinutes / totalMinutes * 100) + '%' },
-          { startTime: 115 * 1000 * 60, duration: pomodoroPeriods.longbreak.duration, title: pomodoroPeriods.longbreak.title, notification: pomodoroPeriods.longbreak.notification, color: pomodoroPeriods.longbreak.color, width: Math.round(longbreakMinutes / totalMinutes * 100) + '%' }
-        ],
+        ]
     }
+
+    let currentTime = 0;
+    for(let p of chronologie) {
+      const confPeriod = pomodoroPeriods[p];
+      data.periods.push({
+        startTime: currentTime, duration: confPeriod.duration, icon: confPeriod.icon, title: confPeriod.title, notification: confPeriod.notification, color: confPeriod.color, width: Math.round(confPeriod.duration / 1000 / 60 / totalMinutes * 100) + '%'
+      })
+      currentTime += confPeriod.duration;
+    }
+
+    return data;
   },
   setup(index, icon, isactive, partof, hasSound) {
   },
@@ -80,7 +85,7 @@ export default {
       let periodeDuration = periodeEnd.getTime() - now.getTime();
       this.minuteRest = Math.floor(Math.round(periodeDuration / 1000) / 60).toString().padStart(2, "0")
       this.secondRest = (Math.round(periodeDuration / 1000) % 60).toString().padStart(2, "0")
-      this.title = this.period.title
+      this.title = this.period.icon + ' ' +this.period.title
       this.color = this.period.color
 
       if(this.active) {
@@ -89,7 +94,7 @@ export default {
           fillColor: this.period.color,
         })
         FavIconX.setValue(parseInt(this.period.progress));
-        document.title = this.period.title.substr(0, 2) + ' ' + this.minuteRest + ':' + this.secondRest + ' - ' + this.icon;
+        document.title = this.period.icon + ' ' + this.minuteRest + ':' + this.secondRest + ' - ' + this.period.title + ' - ' + this.icon;
       }
 
       if(lastStartTimePeriod && lastStartTimePeriod != this.period.startTime) {
@@ -123,8 +128,14 @@ export default {
     toggleSound() {
       this.$emit('toggleSound');
     },
-    copyLink() {
+    copyLink(element) {
       navigator.clipboard.writeText(document.location.href);
+      const btn = element.closest('button');
+      const oldTitle = btn.title;
+      const tooltip = bootstrap.Tooltip.getInstance(btn)
+
+      setTimeout(function() { tooltip.show(); }, 200)
+      setTimeout(function() { tooltip.hide(); }, 2000)
     },
     async toggleNotifications() {
       if(!this.hasNotification) {

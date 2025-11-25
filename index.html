@@ -8,6 +8,7 @@
 
     <link href="./vendor/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./vendor/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="./vendor/vue.global.prod.js"></script>
     <script src="faviconx-min.js"></script>
     <script type="module" src="./src/app.js"></script>
@@ -47,16 +48,16 @@
     <template id="pomodoro-template">
         <div style="cursor: pointer;" class="card" :class="{'shadow': active, 'inactive': !active, 'shadow-sm': !active, 'border-0': active, 'border-start': active, 'border-5': active }" :style="{ 'border-color': active ? color + ' !important' : '', 'border-width': active ? '12px !important' : '', 'cursor': !active ? 'pointer' : 'inherit' }" @click="setActive()">
             <div class="card-body">
-                <span class="position-absolute top-0 start-0 fs-2 ms-2 mt-1" @click="toggleViewAll" style="cursor: pointer;">{{ icon }}</span>
+                <span class="position-absolute top-0 start-0 fs-2 ms-2 mt-1" @click="toggleViewAll" style="cursor: pointer;" data-bs-toggle="tooltip" title="Changer de pomodoro">{{ icon }}</span>
                 <div v-if="active" class="position-absolute top-0 end-0 text-end">
-                    <button class="btn d-block" @click="toggleNotifications()"><i class="bi fs-6" :class="{ 'bi-bell': hasNotification, 'bi-bell-slash-fill': !hasNotification }"></i></button>
-                    <button class="btn d-block" @click="toggleSound"><i class="bi fs-5" :class="{ 'bi-volume-up': hasSound, 'bi-volume-mute-fill': !hasSound }"></i></button>
-                    <button class="btn d-block" @click=""><i class="bi bi-share fs-6"></i></button>
+                    <button class="btn d-block" @click="toggleNotifications()" data-bs-toggle="tooltip" title="Notification" data-bs-placement="right"><i class="bi fs-6" :class="{ 'bi-bell': hasNotification, 'bi-bell-slash-fill': !hasNotification }"></i></button>
+                    <button class="btn d-block" @click="toggleSound" data-bs-toggle="tooltip" title="Notification sonore" data-bs-placement="right"><i class="bi fs-5" :class="{ 'bi-volume-up': hasSound, 'bi-volume-mute-fill': !hasSound }"></i></button>
+                    <button class="btn d-block" @click="copyLink($event.target)" data-bs-toggle="tooltip" title="Le lien a été copié" data-bs-trigger="manual" data-bs-placement="right"><i class="bi bi-share fs-6"></i></button>
                 </div>
                 <div class="display-1 text-center mt-4 font-monospace">{{ minuteRest }}:{{ secondRest }}</div>
                 <div class="fs-4 text-center mt-2 pb-3">{{ title }}</div>
                 <div class="d-flex mt-4">
-                    <div v-for="period in periods" class="progress me-1" role="progressbar" aria-label="" :aria-valuenow="period.progress" aria-valuemin="0" aria-valuemax="100" style="height: 12px;" :style="{ 'width': period.width }"><div class="progress-bar" :style="{'width': period.progress + '%', 'background': period.color }"></div></div>
+                    <div v-for="period in periods" class="progress me-1" role="progressbar" aria-label="" :aria-valuenow="period.progress" aria-valuemin="0" aria-valuemax="100" style="height: 12px; cursor: help;" :style="{ 'width': period.width }" data-bs-toggle="tooltip" :title="period.title + ' de ' + period.duration/1000/60 + ' min ' + period.icon" data-bs-placement="top"><div class="progress-bar" :style="{'width': period.progress + '%', 'background': period.color }"></div></div>
                 </div>
             </div>
         </div>

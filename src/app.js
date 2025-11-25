@@ -3,6 +3,11 @@ import PomodoroCard from "./components/PomodoroCard.js";
 const pomodoroCount = 6;
 const icons = ["🐻","🐝", "🦊","🐢","🐨","🦦","🐧","🐯","🐳","🐗","🐼","🦔","🦝","🐶"];
 
+document.addEventListener("DOMContentLoaded", (event) => {
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+})
+
 const app = Vue.createApp({
   components: { PomodoroCard },
   data() {
