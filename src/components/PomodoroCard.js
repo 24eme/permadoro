@@ -4,7 +4,7 @@ const shortbreakMinutes = 5;
 const longbreakMinutes = 15;
 const totalMinutes = 130;
 const pomodoroPeriods = {
-  pomodoro: { title: "Pomodoro", icon: "🍅", notification: "On ce concentre sur sa tâche pendant 25 minutes, aucune distraction !", duration: pomodoroMinutes * 1000 * 60, color: '#dc3545'},
+  pomodoro: { title: "Concentration", icon: "🍅", notification: "On ce concentre sur sa tâche pendant 25 minutes, aucune distraction !", duration: pomodoroMinutes * 1000 * 60, color: '#dc3545'},
   shortbreak: { title: "Pause Courte", icon: "☕", notification: "On lève les mains du clavier, courte pause de 5 minutes !", duration: shortbreakMinutes * 1000 * 60, color: '#ffc107'},
   longbreak: { title: "Pause longue", icon: "🏖️", notification: "Loooooonnnngue pause, 15 minutes pour chiller !", duration: longbreakMinutes * 1000 * 60, color: '#ffc107'}
 }

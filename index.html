@@ -24,7 +24,7 @@
 
   <body>
     <div id="app" class="container mt-3">
-      <div class="text-center"><img src="icon.svg" height="64" class="text-center" /></div>
+      <div class="text-center mt-4"><img src="icon.svg" height="64" class="text-center" /></div>
       <h1 class="fw-light display-6 text-center">Permadoro</h1>
       <h2 class="fw-light mt-2 fs-5 text-center">Un pomodoro <strong>permanent à partager</strong> pour faire des sessions <strong>à plusieurs</strong></h1>
       <div id="pomodoros" class="row mt-4">
@@ -49,6 +49,9 @@
       <button class="btn btn-light" @click="toggleViewAll" :hidden="viewAll"><i class="bi bi-arrow-left-right"></i> Changer de pomodoro</button>
       <button class="btn btn-light" @click="toggleViewAll" :hidden="!viewAll"><i class="bi bi-eye-slash"></i> Cacher la mosaïque</button>
       </div>
+      <footer class="text-center text-muted mt-5 pt-5 fw-light">
+        Logiciel libre sous licence AGPL-3.0 : <a href="https://github.com/24eme/permadoro">voir le code source</a>
+      </footer>
     </div>
     <audio id="audio_bell" src="/vendor/Bell_4_BSB_2116_Joseph_SARDIN.ogg"></audio>
     <template id="pomodoro-template">
