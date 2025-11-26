@@ -134,7 +134,7 @@ export default {
       const tooltip = bootstrap.Tooltip.getOrCreateInstance(btn)
 
       setTimeout(function() { tooltip.show(); }, 200)
-      setTimeout(function() { tooltip.hide(); }, 2000)
+      setTimeout(function() { tooltip.hide(); }, 1500)
     },
     async toggleNotifications() {
       if(!this.hasNotification) {

@@ -4,8 +4,11 @@
     <meta charset="UTF-8" />
     <title>Permadoro - Pomodoro collectif</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="description" content="Une application libre de pomodoro collectif pour faire des sessions de pomodoro à plusieurs" />
-
+    <meta name="description" content="Une application libre de pomodoro permanent pour faire des sessions à plusieurs" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <link href="./vendor/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./vendor/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
@@ -21,7 +24,10 @@
 
   <body>
     <div id="app" class="container mt-3">
-      <div id="pomodoros" class="row">
+      <div class="text-center"><img src="icon.svg" height="64" class="text-center" /></div>
+      <h1 class="fw-light display-6 text-center">Permadoro</h1>
+      <h2 class="fw-light mt-2 fs-5 text-center">Un pomodoro <strong>permanent à partager</strong> pour faire des sessions <strong>à plusieurs</strong></h1>
+      <div id="pomodoros" class="row mt-4">
         <div v-for="p of pomodoros" class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mt-4 mx-auto" :hidden="!viewAll && p.index != activeIndex" :class="{'col-xxl-5': !viewAll, 'col-lg-7': !viewAll, 'col-md-9': !viewAll}">
             <pomodoro-card
             :key="p.index"
@@ -50,8 +56,8 @@
             <div class="card-body">
                 <span class="position-absolute top-0 start-0 fs-2 ms-2 mt-1" @click="toggleViewAll" style="cursor: pointer;" data-bs-toggle="tooltip" title="Changer de pomodoro">{{ icon }}</span>
                 <div v-if="active" class="position-absolute top-0 end-0 text-end">
-                    <button class="btn d-block" @click="toggleNotifications()" data-bs-toggle="tooltip" title="Notification" data-bs-placement="right"><i class="bi fs-6" :class="{ 'bi-bell': hasNotification, 'bi-bell-slash-fill': !hasNotification }"></i></button>
-                    <button class="btn d-block" @click="toggleSound" data-bs-toggle="tooltip" title="Notification sonore" data-bs-placement="right"><i class="bi fs-5" :class="{ 'bi-volume-up': hasSound, 'bi-volume-mute-fill': !hasSound }"></i></button>
+                    <button class="btn d-block" @click="toggleNotifications()" data-bs-toggle="tooltip" data-bs-placement="right"><i class="bi fs-6" :class="{ 'bi-bell': hasNotification, 'bi-bell-slash-fill': !hasNotification }"></i></button>
+                    <button class="btn d-block" @click="toggleSound" data-bs-toggle="tooltip" data-bs-placement="right"><i class="bi fs-5" :class="{ 'bi-volume-up': hasSound, 'bi-volume-mute-fill': !hasSound }"></i></button>
                     <button class="btn d-block" @click="copyLink($event.target)" data-bs-toggle="tooltip" title="Le lien a été copié" data-bs-trigger="manual" data-bs-placement="right"><i class="bi bi-share fs-6"></i></button>
                 </div>
                 <div class="display-1 text-center mt-4 font-monospace">{{ minuteRest }}:{{ secondRest }}</div>
