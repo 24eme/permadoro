@@ -128,7 +128,7 @@ const app = Vue.createApp({
     playSound() {
       let audio = document.getElementById("audio_bell");
       audio.play();
-      audio.volume = 0.4;
+      audio.volume = 0.25;
     }
   }
 });
