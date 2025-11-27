@@ -106,7 +106,7 @@ const app = Vue.createApp({
       if(this.hasSound) {
         this.playSound()
       }
-      if(p.activeNotifications) {
+      if(p.hasNotification) {
         new Notification(p.icon + ' ' + p.period.title, {
           body: newPeriod.notification
         });
