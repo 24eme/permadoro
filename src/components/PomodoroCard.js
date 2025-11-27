@@ -116,9 +116,6 @@ export default {
       this.active = false;
     },
     setActive() {
-      if(this.active) {
-        return;
-      }
       this.active = true
       this.$emit('changeActive', this);
     },
