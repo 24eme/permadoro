@@ -141,6 +141,11 @@ export default {
         this.hasNotification = false
       }
       localStorage.setItem('notification', this.hasNotification*1)
+      if(this.hasNotification) {
+        new Notification(this.icon + ' Permadoro', {
+          body: "Les notifications sont activées"
+        });
+      }
     }
   },
   watch: {

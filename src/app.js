@@ -104,7 +104,7 @@ const app = Vue.createApp({
     },
     changePomodoroPeriod(p, newPeriod) {
       if(this.hasSound) {
-        document.getElementById("audio_bell").play();
+        this.playSound()
       }
       if(p.activeNotifications) {
         new Notification(p.icon + ' ' + p.period.title, {
@@ -121,6 +121,14 @@ const app = Vue.createApp({
     toggleSound() {
       this.hasSound = !this.hasSound;
       localStorage.setItem("sound", this.hasSound*1);
+      if(this.hasSound) {
+        this.playSound()
+      }
+    },
+    playSound() {
+      let audio = document.getElementById("audio_bell");
+      audio.play();
+      audio.volume = 0.4;
     }
   }
 });
