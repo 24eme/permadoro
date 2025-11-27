@@ -46,8 +46,8 @@
         </div>
       </div>
       <div class="text-center mt-5">
-      <button class="btn btn-light" @click="toggleViewAll" :hidden="viewAll"><i class="bi bi-arrow-left-right"></i> Changer de pomodoro</button>
-      <button class="btn btn-light" @click="toggleViewAll" :hidden="!viewAll"><i class="bi bi-eye-slash"></i> Cacher la mosaïque</button>
+      <button class="btn btn-light" @click="toggleViewAll()" :hidden="viewAll"><i class="bi bi-arrow-left-right"></i> Changer de pomodoro</button>
+      <button class="btn btn-light" @click="toggleViewAll()" :hidden="!viewAll"><i class="bi bi-eye-slash"></i> Cacher la mosaïque</button>
       </div>
       <footer class="text-center text-muted mt-5 pt-5 fw-light">
         Logiciel libre sous licence AGPL-3.0 : <a href="https://github.com/24eme/permadoro">voir le code source</a>
@@ -57,7 +57,7 @@
     <template id="pomodoro-template">
         <div style="cursor: pointer;" class="card" :class="{'shadow': active, 'inactive': !active, 'shadow-sm': !active, 'border-0': active, 'border-start': active, 'border-5': active }" :style="{ 'border-color': active ? color + ' !important' : '', 'border-width': active ? '12px !important' : '', 'cursor': !active ? 'pointer' : 'inherit' }" @click="setActive()">
             <div class="card-body">
-                <span class="position-absolute top-0 start-0 fs-2 ms-2 mt-1" @click="toggleViewAll" style="cursor: pointer;" data-bs-toggle="tooltip" title="Changer de pomodoro">{{ icon }}</span>
+                <span class="position-absolute top-0 start-0 fs-2 ms-2 mt-1" @click="toggleViewAll($event)" style="cursor: pointer;" data-bs-toggle="tooltip" title="Changer de pomodoro">{{ icon }}</span>
                 <div v-if="active" class="position-absolute top-0 end-0 text-end">
                     <button class="btn d-block" @click="toggleNotifications()" data-bs-toggle="tooltip" data-bs-placement="right"><i class="bi fs-6" :class="{ 'bi-bell': hasNotification, 'bi-bell-slash-fill': !hasNotification }"></i></button>
                     <button class="btn d-block" @click="toggleSound" data-bs-toggle="tooltip" data-bs-placement="right"><i class="bi fs-5" :class="{ 'bi-volume-up': hasSound, 'bi-volume-mute-fill': !hasSound }"></i></button>

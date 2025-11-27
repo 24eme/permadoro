@@ -119,7 +119,8 @@ export default {
       this.active = true
       this.$emit('changeActive', this);
     },
-    toggleViewAll() {
+    toggleViewAll(event) {
+      event.stopPropagation()
       this.$emit('toggleViewAll');
     },
     toggleSound() {

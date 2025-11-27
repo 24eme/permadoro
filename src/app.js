@@ -89,8 +89,7 @@ const app = Vue.createApp({
       document.location.hash = '#'+p.index+p.icon;
     },
     changePomodoroActive(pActive) {
-      if(this.activeIndex == pActive.index) {
-        this.viewAll = false
+      if(this.activeIndex == pActive.index && this.viewAll == false) {
         return;
       }
       this.activeIndex = pActive.index;
