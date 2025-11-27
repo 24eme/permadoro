@@ -32,7 +32,7 @@ const app = Vue.createApp({
   },
   mounted() {
     this.sortPomodoros();
-    if(!this.activeIndex) {
+    if(this.activeIndex === null) {
       this.activeIndex = this.pomodoros[0].index;
     }
     this.getPomodoro(this.activeIndex).refObject[0].setActive()
