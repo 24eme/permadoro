@@ -94,7 +94,7 @@ export default {
           fillColor: this.period.color,
         })
         FavIconX.setValue(parseInt(this.period.progress));
-        document.title = this.period.icon + ' ' + this.minuteRest + ':' + this.secondRest + ' - ' + this.period.title + ' - ' + this.icon;
+        document.title = this.minuteRest + ':' + this.secondRest + ' - ' + this.period.title + ' - ' + this.icon;
       }
 
       if(lastStartTimePeriod && lastStartTimePeriod != this.period.startTime) {
