@@ -23,11 +23,10 @@
   </head>
 
   <body>
-    <div id="app" class="container mt-3">
-      <div class="text-center mt-4"><img src="icon.svg" height="72" class="text-center" /></div>
-      <h1 class="fw-light display-6 text-center">Permadoro</h1>
-      <h2 class="fw-light mt-2 fs-5 text-center">Un pomodoro <strong>permanent</strong> à partager pour faire des sessions <strong>à plusieurs</strong></h1>
-      <div id="pomodoros" class="row mt-4">
+    <div id="app" class="container">
+      <h1 class="fw-light display-6 text-center mt-4"><img src="icon_text.svg" height="36" class="text-center" /></h1>
+      <h2 class="fw-light mt-2 fs-5 text-center mt-4">Un pomodoro <strong>permanent</strong> à partager pour faire des sessions <strong>à plusieurs</strong></h1>
+      <div id="pomodoros" class="row mt-5">
         <div v-for="p of pomodoros" class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mt-4 mx-auto" :hidden="!viewAll && p.index != activeIndex" :class="{'col-xxl-5': !viewAll, 'col-lg-7': !viewAll, 'col-md-9': !viewAll}">
             <pomodoro-card
             :key="p.index"
