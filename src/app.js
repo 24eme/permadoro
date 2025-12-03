@@ -19,16 +19,6 @@ const app = Vue.createApp({
     };
   },
   setup() {
-    FavIconX.config({
-      borderColor: '#000',
-      fillColor: '#000',
-      borderWidth: 2,
-      shadowColor: '#fff',
-      shape: 'circle',
-      updateTitle: false
-    });
-
-    document.title = 'Permadoro - Pomodoro collectif';
   },
   mounted() {
     this.sortPomodoros();

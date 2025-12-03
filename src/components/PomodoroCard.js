@@ -18,6 +18,7 @@ export default {
     const data = {
         title: pomodoroPeriods.pomodoro.title, notification: pomodoroPeriods.pomodoro.notification,
         active: false,
+        retentionPeriod: true,
         minuteRest: null,
         secondRest: null,
         startDateHistoric: null,
@@ -44,11 +45,15 @@ export default {
   setup(index, icon, isactive, partof, hasSound) {
   },
   created() {
+    this.retentionPeriod = true
     this.active = this.isactive
     this.startDateHistoric = new Date(dateHistoric.getTime() - (this.index * (Math.floor(totalMinutes/this.partof) * 1000 * 60)));
     this.updateStartDate()
     this.updateTimer()
     this.timer = setInterval(this.updateTimer, 1000)
+
+    let component = this;
+    setTimeout(function() { component.retentionPeriod = false; }, 3000);
   },
   methods: {
     updateStartDate() {
@@ -88,11 +93,15 @@ export default {
       this.title = this.period.icon + ' ' +this.period.title
       this.color = this.period.color
 
-      if(this.active) {
+      if(this.active && !this.retentionPeriod) {
         FavIconX.config({
           borderColor: this.period.color,
           fillColor: this.period.color,
-        })
+          borderWidth: 2,
+          shadowColor: '#fff',
+          shape: 'circle',
+          updateTitle: false
+        });
         FavIconX.setValue(parseInt(this.period.progress));
         document.title = this.minuteRest + ':' + this.secondRest + ' - ' + this.period.title + ' - ' + this.icon;
       }
